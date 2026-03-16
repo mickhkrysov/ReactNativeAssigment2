@@ -51,34 +51,46 @@ const createInitialStatistics = (): StatisticsType => ({
   9: 0,
 });
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+const StatisticsContext = createContext<StatisticsContextType | undefined>(
+  undefined
+);
+
+const useStatistics = (): StatisticsContextType => {
+  const context = useContext(StatisticsContext);
+  if (!context) {
+    throw new Error('useStatistics must be used inside StatisticsProvider');
+  }
+  return context;
+};
+
+const StatisticsProvider = ({ children }: { children: ReactNode }) => {
+  const [statistics, setStatistics] = useState<StatisticsType>(
+    createInitialStatistics()
+  );
+
+  const incrementNumber = (num: number) => {
+    setStatistics(prev => ({
+      ...prev,
+      [num]: prev[num] + 1,
+    }));
+  };
+
+  const clearStatistics = () => {
+    setStatistics(createInitialStatistics());
+  };
+
+  const value = useMemo(
+    () => ({
+      statistics,
+      incrementNumber,
+      clearStatistics,
+    }),
+    [statistics]
+  );
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+    <StatisticsContext.Provider value={value}>
+      {children}
+    </StatisticsContext.Provider>
   );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default App;
+};
