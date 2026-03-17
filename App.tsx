@@ -5,7 +5,6 @@
  * @format
  */
 
-
 import React, {
   createContext,
   useContext,
@@ -178,3 +177,101 @@ const StatisticsScreen = ({ navigation }: StatisticsScreenProps) => {
     </View>
   );
 };
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export default function App() {
+  return (
+    <StatisticsProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#7f5539',
+            },
+            headerTintColor: '#ffffff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            contentStyle: {
+              backgroundColor: '#f5ebe0',
+            },
+          }}
+        >
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: 'Random Number Generator' }}
+          />
+          <Stack.Screen
+            name="Statistics"
+            component={StatisticsScreen}
+            options={{ title: 'Statistics' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StatisticsProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5ebe0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  numberBox: {
+    width: 180,
+    height: 180,
+    borderRadius: 20,
+    backgroundColor: '#b08968',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40,
+    elevation: 4,
+  },
+  numberText: {
+    fontSize: 64,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  button: {
+    width: '80%',
+    backgroundColor: '#7f5539',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  listContainer: {
+    width: '100%',
+    paddingBottom: 20,
+  },
+  statRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#b08968',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  statNumber: {
+    fontSize: 18,
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+  statCount: {
+    fontSize: 18,
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+});
